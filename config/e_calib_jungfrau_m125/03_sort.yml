@@ -2,7 +2,8 @@ scan_motor:
   da_name: DA01
   dataset: /CONTROL/FXE_XTD9_MONO-2/MOTOR/ACCM_PITCH/actualPosition/value
   trainId: /INDEX/trainId
-normalization: 
+normalization:
     roi : 0
 filtering:
-    min_points : 80
+    min_points : 200
+    value_threshold: 1e-2
