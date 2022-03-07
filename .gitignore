@@ -1,0 +1,14 @@
+__pycache__/
+del_tools
+notebooks/
+*.pyc
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Detector files
+Jungfrau_M233.txt
+Jungfrau_M260.txt
+Jungfrau_M125.txt
+
+scan_caldb.py
