@@ -10,8 +10,8 @@ jungfrau_m233:
             g0: /pnfs/xfel.eu/exfel/archive/XFEL/raw/FXE/202022/p002705/r0005/
             g1: /pnfs/xfel.eu/exfel/archive/XFEL/raw/FXE/202022/p002705/r0005/
             g2: /pnfs/xfel.eu/exfel/archive/XFEL/raw/FXE/202022/p002705/r0005/
-            file_index: 0
-            indizes : [0, 15] 
+            file_index: 5
+            indizes : [250, 300] 
 
 jungfrau_m125:
     gain :
@@ -25,8 +25,8 @@ jungfrau_m125:
             g0: /pnfs/xfel.eu/exfel/archive/XFEL/raw/FXE/202022/p002705/r0005/
             g1: /pnfs/xfel.eu/exfel/archive/XFEL/raw/FXE/202022/p002705/r0005/
             g2: /pnfs/xfel.eu/exfel/archive/XFEL/raw/FXE/202022/p002705/r0005/
-            file_index: 0
-            indizes : [0, 15]
+            file_index: 5
+            indizes : [250, 300]
 
 jungfrau_m260:
     gain :
@@ -40,5 +40,5 @@ jungfrau_m260:
             g0: /pnfs/xfel.eu/exfel/archive/XFEL/raw/FXE/202022/p002705/r0005/
             g1: /pnfs/xfel.eu/exfel/archive/XFEL/raw/FXE/202022/p002705/r0005/
             g2: /pnfs/xfel.eu/exfel/archive/XFEL/raw/FXE/202022/p002705/r0005/
-            file_index: 0
-            indizes : [0, 15]
+            file_index: 5
+            indizes : [250, 300]

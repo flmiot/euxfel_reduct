@@ -54,11 +54,14 @@ if __name__ == '__main__':
         
         Log.info("Integrating roi {}".format(name))
         
-        x0, x1 = iconfig['roi'][int(name)]['normalization_region']
-        norm_region = [
-            np.argmin(np.abs(d[name]['x'] - x0)),
-            np.argmin(np.abs(d[name]['x'] - x1))
-        ]
+        norm_region = iconfig['roi'][int(name)]['normalization_region']
+        
+        if norm_region != False:
+            x0, x1 = norm_region
+            norm_region = [
+                np.argmin(np.abs(d[name]['x'] - x0)),
+                np.argmin(np.abs(d[name]['x'] - x1))
+            ]
 
         for lstate in ['on', 'off']:
             d[name][lstate] = np.nanmean(sort_d[signal_name][lstate], axis = axes)
@@ -68,8 +71,9 @@ if __name__ == '__main__':
                 background_id = str(background_id)
                 d[name][lstate] -= np.nanmean(sort_d[background_id]['on'], axis = axes) / l
                 
-            # Normalize       
-            d[name][lstate] = normalize(d[name][lstate], *norm_region)
+            # Normalize
+            if norm_region != False:
+                d[name][lstate] = normalize(d[name][lstate], *norm_region)
             
                 
     tools.write_dict_to_hdf5(d, scratchp(hdf_file_name), override = True)

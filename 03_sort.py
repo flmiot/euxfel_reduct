@@ -18,8 +18,12 @@ def get_laser_sorted(train_ids):
     return np.array([0,1]), arr
 
 def get_motor_sorted(train_ids, motor_values, min_points, value_threshold):
+    
+    # Round motor_value to make value differences below *value_threshold* 
+    # indistinguishable 
+    motor_values = np.around(motor_values, value_threshold)
     values, counts = np.unique(motor_values, return_counts = True)
-
+    
     sorted_values = []
 
     for v, c in zip(values, counts):
@@ -63,15 +67,10 @@ if __name__ == '__main__':
     files = [f for f in sorted(os.listdir(config['directory'])) if sort['scan_motor']['da_name'] in f]
     files = [os.path.join(config['directory'], f) for f in files]
 
-
-
-
     h5_path = sort['scan_motor']['trainId']
     l, sequence = tools.get_dataset_length(files, h5_path)
     motor_trains = np.empty(l)
     motor_values = np.empty(l)
-
-
 
     # Read data into memory
     for idx, file in enumerate(files):
@@ -133,7 +132,7 @@ if __name__ == '__main__':
 
         t_adc = adc[b_adc]
         t_trains = trains[b_adc]
-        t_motor_values = motor_values[b_motor]
+        t_motor_values = np.around(motor_values[b_motor], sort['filtering']['value_threshold'])
 
         for sidx, value in enumerate(sorted_values):
             b = np.nonzero(t_motor_values == value)[0]
