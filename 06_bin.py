@@ -1,3 +1,11 @@
+""" 06_bin: Read ROI data from 05_integrate.h5 in the same directory and
+    bin integrated spectra along x. 
+
+    Call as: python 06_bin.py /scratch/directory /config/directory
+
+    Depends on the 06_bin.yml config file.
+"""
+
 import os
 import sys
 import yaml
@@ -12,11 +20,12 @@ hdf_file_name = os.path.split(os.path.splitext(__file__)[0])[1] + '.h5'
 
 def bin_data(x, y, bin_size = 2):
     """ Will bin among first dimension """
+    
+
    
     shape = (int(y.shape[0] / bin_size),) + y.shape[1:]
     binned_y = np.zeros( (bin_size, ) + shape )
     binned_x = np.zeros( (bin_size, ) + (shape[0], ) )
-
     
     for i in range(bin_size):
         i0 = i

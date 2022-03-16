@@ -7,6 +7,7 @@ roi:
   dim1:
   - 0
   - 512
+  veto_group: 0
 - detector: jungfrau_m125
   dim0:
   - 279
@@ -14,6 +15,7 @@ roi:
   dim1:
   - 0
   - 512
+  veto_group: 0
 - detector: jungfrau_m125
   dim0:
   - 340
@@ -21,6 +23,7 @@ roi:
   dim1:
   - 0
   - 512
+  veto_group: 0
 - detector: jungfrau_m260
   dim0:
   - 307
@@ -28,6 +31,7 @@ roi:
   dim1:
   - 0
   - 1024
+  veto_group: 1
 - detector: jungfrau_m260
   dim0:
   - 279
@@ -35,6 +39,7 @@ roi:
   dim1:
   - 0
   - 1024
+  veto_group: 1
 - detector: jungfrau_m260
   dim0:
   - 340
@@ -42,3 +47,4 @@ roi:
   dim1:
   - 0
   - 1024
+  veto_group: 1

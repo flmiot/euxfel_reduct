@@ -1,3 +1,11 @@
+""" 05_integrate: Read ROI data from 04_fill.h5 in the same directory and
+    integrate ROI along y. Specified background ROI will be subtracted. 
+
+    Call as: python 05_integrate.py /scratch/directory /config/directory
+
+    Depends on the 05_integrate.yml config file.
+"""
+
 import os
 import sys
 import yaml
@@ -64,7 +72,7 @@ if __name__ == '__main__':
             ]
 
         for lstate in ['on', 'off']:
-            d[name][lstate] = np.nanmean(sort_d[signal_name][lstate], axis = axes)
+            d[name][lstate] = np.nanmean(sort_d[signal_name][lstate], axis = axes)         
             l = len(roi['background'])
             
             for background_id in roi['background']:

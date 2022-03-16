@@ -1,7 +1,7 @@
 import os
 import yaml
 
-base = r'2699_81'
+base = r'default'
 
 base_files = os.listdir(base)
 
@@ -14,11 +14,15 @@ for i in range(1, 104+1):
         print(e)
 
     for f in base_files:
-        with open(os.path.join(base, f), 'rb') as file:
-            b = file.read()
+        try:
+            
+            with open(os.path.join(base, f), 'rb') as file:
+                b = file.read()
 
-        with open(os.path.join(folder_name, f), 'wb') as file:
-            file.write(b)
+            with open(os.path.join(folder_name, f), 'wb') as file:
+                file.write(b)
+        except IsADirectoryError as e:
+            print(e)
 
 
     with open(os.path.join(base, '01_filter.yml'), 'r') as file:
@@ -31,10 +35,7 @@ for i in range(1, 104+1):
     with open(os.path.join(base, 'Makefile'), 'r') as file:
         l = list(file.readlines())
 
-    print(l)
     l[2] = 'SCRATCH = /home/$(USER)/scratch/tmp/{}\n'.format(folder_name)
 
     with open(os.path.join(folder_name, 'Makefile'), 'w+') as file:
         file.write("".join(l))
-
-    print(l)

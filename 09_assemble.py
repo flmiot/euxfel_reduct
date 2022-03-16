@@ -1,3 +1,11 @@
+""" 09_assemble: Read ROI data from multiple h5 files in this directory and
+    assemble them inside one collector file for further data processing. 
+
+    Call as: python 09_assemble.py /scratch/directory /config/directory
+
+    Depends on the 09_assemble.yml config file.
+"""
+
 import os
 import sys
 import yaml
@@ -11,6 +19,9 @@ import scipy.interpolate as interp
 log_file_name = os.path.split(os.path.splitext(__file__)[0])[1] + '.log'
 yml_file_name = os.path.split(os.path.splitext(__file__)[0])[1] + '.yml'
 hdf_file_name = os.path.split(os.path.splitext(__file__)[0])[1] + '.h5'
+
+def calculate_errors(arr):
+    return np.std(arr, axis = 0)
 
 if __name__ == '__main__':
     scratch_directory = sys.argv[1]
@@ -51,6 +62,10 @@ if __name__ == '__main__':
         for k in ['on', 'off', 'motor']:
             d[name][k] = bin_d[name][k]
             
-        d[name]['difference'] = subtract_d[name]['difference']        
+        d[name]['difference'] = subtract_d[name]['difference'] 
+        std = calculate_errors(d[name]['off'])
+        d[name]['on_errors'] = std
+        d[name]['off_errors'] = std
+        d[name]['difference_errors'] = np.sqrt(std**2+std**2)
             
     tools.write_dict_to_hdf5(d, scratchp(hdf_file_name), override = True)

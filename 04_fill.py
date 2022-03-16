@@ -1,3 +1,13 @@
+""" 04_fill: Read ROI data from 03_sort.h5 in the same directory and
+    fill specified pixels (x,y) with the mean of the their closest x 
+    neighbors
+
+    Call as: python 04_fill.py /scratch/directory /config/directory
+
+    Depends on the 04_fill.yml config file.
+"""
+
+
 import os
 import sys
 import yaml

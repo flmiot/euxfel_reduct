@@ -1,3 +1,11 @@
+""" 07_subtract: Read ROI data from 06_bin.h5 in the same directory and
+    compute difference spectra
+
+    Call as: python 07_subtract.py /scratch/directory /config/directory
+
+    Depends on the 07_subtract.yml config file.
+"""
+
 import os
 import sys
 import yaml

@@ -1,3 +1,11 @@
+""" 03_sort: Read ROI data from 02_calibrate.h5 in the same directory and
+    sort/integrate according to respective scanned motor positions
+
+    Call as: python 03_sort.py /scratch/directory /config/directory
+
+    Depends on the 03_sort.yml config file.
+"""
+
 import os
 import sys
 import yaml
@@ -9,13 +17,6 @@ import tools
 log_file_name = os.path.split(os.path.splitext(__file__)[0])[1] + '.log'
 yml_file_name = os.path.split(os.path.splitext(__file__)[0])[1] + '.yml'
 hdf_file_name = os.path.split(os.path.splitext(__file__)[0])[1] + '.h5'
-
-def get_laser_sorted(train_ids):
-    arr = np.empty((2,) + train_ids.shape)
-    arr[0] = train_ids
-    arr[1] = 0
-    arr[train_ids % 2 == 0] = 1
-    return np.array([0,1]), arr
 
 def get_motor_sorted(train_ids, motor_values, min_points, value_threshold):
     
@@ -107,6 +108,7 @@ if __name__ == '__main__':
 
     d = {}
     calibrate_d = tools.load_dict_from_hdf5(scratchp('02_calibrate.h5'))
+
     for idx, roi in enumerate(config['roi']):
         name = str(idx)
         d[name] = {}
@@ -123,12 +125,12 @@ if __name__ == '__main__':
         n = np.nansum(n, axis = (1,2,3))
         adc = calibrate_d[name]['adc'] / n[:, None, None, None]
         trains = calibrate_d[name]['trains']
-
+        
         # Align motor and adc trains
         b_adc = np.nonzero(np.in1d(trains, motor_trains))[0]
         b_motor = np.nonzero(np.in1d(motor_trains, trains))[0]
         Log.debug("{} aligned trains (of total {} train for scan motor & {} trains for adc)".format(
-            len(b_adc), len(motor_trains), len(trains)))
+            len(b_adc), len(motor_trains), len(trains))) 
 
         t_adc = adc[b_adc]
         t_trains = trains[b_adc]

@@ -1,3 +1,10 @@
+""" 01_filter: Extract raw ROI data from hdf5 files
+
+    Call as: python 01_filter.py /scratch/directory /config/directory
+
+    Depends on the 01_filter.yml config file.
+"""
+
 import os
 import sys
 import yaml

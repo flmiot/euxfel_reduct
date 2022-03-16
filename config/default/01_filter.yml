@@ -1,6 +1,7 @@
-directory: /pnfs/xfel.eu/exfel/archive/XFEL/raw/FXE/202022/p002699/r0081/
+directory: /pnfs/xfel.eu/exfel/archive/XFEL/raw/FXE/202022/p002699/rxxxx/
 roi:
 - detector: jungfrau_m125
+  veto_group: 0
   dim0:
   - 307
   - 328
@@ -8,6 +9,7 @@ roi:
   - 0
   - 512
 - detector: jungfrau_m125
+  veto_group: 0
   dim0:
   - 279
   - 300
@@ -15,6 +17,7 @@ roi:
   - 0
   - 512
 - detector: jungfrau_m125
+  veto_group: 0
   dim0:
   - 340
   - 361
@@ -22,6 +25,7 @@ roi:
   - 0
   - 512
 - detector: jungfrau_m260
+  veto_group : 1
   dim0:
   - 307
   - 328
@@ -29,6 +33,7 @@ roi:
   - 0
   - 1024
 - detector: jungfrau_m260
+  veto_group : 1
   dim0:
   - 279
   - 300
@@ -36,6 +41,7 @@ roi:
   - 0
   - 1024
 - detector: jungfrau_m260
+  veto_group : 1
   dim0:
   - 340
   - 361

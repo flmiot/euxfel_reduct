@@ -1,6 +1,6 @@
 # Default reduction makefile
 SCRIPTS = /home/$(USER)/Git/euxfel_reduction
-SCRATCH = /home/$(USER)/scratch/tmp/2699_081
+SCRATCH = /home/$(USER)/scratch/tmp/2699_094
 
 all : $(SCRATCH)/01_filter.h5 $(SCRATCH)/02_calibrate.h5 $(SCRATCH)/03_sort.h5 $(SCRATCH)/04_fill.h5 $(SCRATCH)/05_integrate.h5 $(SCRATCH)/06_bin.h5 $(SCRATCH)/07_subtract.h5 $(SCRATCH)/08_energy.h5 $(SCRATCH)/09_assemble.h5
 

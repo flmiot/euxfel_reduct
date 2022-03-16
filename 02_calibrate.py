@@ -1,3 +1,11 @@
+""" 02_calibrate: Calibrate JungFrau detector data read from 01_filter.h5
+    in the same directory. 
+
+    Call as: python 02_calibrate.py /scratch/directory /config/directory
+
+    Depends on the 02_calibrate.yml config file.
+"""
+
 import os
 import sys
 import yaml
@@ -9,29 +17,6 @@ import tools
 log_file_name = os.path.split(os.path.splitext(__file__)[0])[1] + '.log'
 yml_file_name = os.path.split(os.path.splitext(__file__)[0])[1] + '.yml'
 hdf_file_name = os.path.split(os.path.splitext(__file__)[0])[1] + '.h5'
-
-# Bad pixel type Bit mask
-# OFFSET_OUT_OF_THRESHOLD 0000000000000001
-# NOISE_OUT_OF_THRESHOLD 0000000000000010
-# OFFSET_NOISE_EVAL_ERROR 0000000000000100
-# NO_DARK_DATA 0000000000001000
-# CI_GAIN_OF_OF_THRESHOLD 0000000000010000
-# CI_LINEAR_DEVIATION 0000000000100000
-# CI_EVAL_ERROR 0000000001000000
-# FF_GAIN_EVAL_ERROR 0000000010000000
-# FF_GAIN_DEVIATION 0000000100000000
-# FF_NO_ENTRIES 0000001000000000
-# CI2_EVAL_ERROR 0000010000000000
-# VALUE_IS_NAN 0000100000000000
-# VALUE_OUT_OF_RANGE 0001000000000000
-# GAIN_THRESHOLDING_ERROR 0010000000000000
-# DATA_STD_IS_ZERO 0100000000000000
-# ASIC_STD_BELOW_NOISE 1000000000000000
-# INTERPOLATED 10000000000000000
-# NOISY_ADC 100000000000000000
-# OVERSCAN 1000000000000000000
-# NON_SENSITIVE 10000000000000000000
-# NON_LIN_RESPONSE_REGION 100000000000000000000
 
 def calibrate(adc, gain, gain_constants, mask, pedestal, max_pixels_non_g0):
     
@@ -45,11 +30,15 @@ def calibrate(adc, gain, gain_constants, mask, pedestal, max_pixels_non_g0):
     non_g0_pixels = (gain > 0).sum(axis = (1,2,3))
 
     corr[cal_mask == 1] = np.nan
-    corr[non_g0_pixels > max_pixels_non_g0] = np.nan # Exclude all pixels in gain g1 or g2 
-    corr[gain > 0] = np.nan
     
+    # Exclude all frames, where number of g1 or g2 pixels is too big
+    corr[non_g0_pixels > max_pixels_non_g0] = np.nan 
+    
+    # Exclude all pixels in gain g1 or g2 
+    corr[gain > 0] = np.nan 
     
     return corr
+
 
 if __name__ == '__main__':
     scratch_directory = sys.argv[1]
@@ -91,7 +80,6 @@ if __name__ == '__main__':
         det_name = roi['detector']
         det = cconf[det_name]
         det.update(detectors[det_name])
-        
         
         # Get gain constants
         # Gain: dim0 and dim1 are switched
@@ -160,5 +148,29 @@ if __name__ == '__main__':
             max_pixels_non_g0 = det['gain']['max_allowed_non_g0_pixels']
         )
         d[name]['trains'] = filter_d[name]['trains']
+        
+    # Process veto groups: Only keep data for trains which are not NaN in any of the other ROI
+    Log.info("Processing veto groups")
+    
+    vg = {}
+    for idx, roi in enumerate(fconf['roi']):
+        if roi['veto_group'] in vg.keys():
+            vg[roi['veto_group']].append(idx)
+        else:
+            vg[roi['veto_group']] = [idx]
+            
+    veto = np.zeros((len(list(vg.keys())), filter_d['0']['adc'].shape[0]), dtype = bool) + 1
+    
+    for idx, key in enumerate(vg.keys()):
+        for roi in vg[key]:
+            veto[idx] = np.logical_and(veto[idx], np.sum(~np.isnan(d[str(roi)]['adc']), axis = (1,2,3)))
+
+        veto[idx] = veto[idx] == False
+        
+    for idx, roi in enumerate(fconf['roi']):
+        veto_mask = np.nonzero(veto[int(roi['veto_group'])])
+        d[str(idx)]['adc'][veto_mask] = np.nan
+        Log.debug("Total trains vetoed for roi {}: {} of {}".format(idx, np.sum(veto_mask), d[str(idx)]['adc'].shape[0]))
+        
 
     tools.write_dict_to_hdf5(d, scratchp(hdf_file_name), override = True)

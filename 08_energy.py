@@ -1,3 +1,14 @@
+""" 08_energy: Read ROI data from 05_integrate.h5 in ANOTHER directory,
+    search for scanned elastic peaks and fit a function to describe the 
+    position of the leastic peaks as a function of incoming photon energy.
+    
+    Then, determine the calibrated energy axes for the ROI in this directory.
+
+    Call as: python 08_energy.py /scratch/directory /config/directory
+
+    Depends on the 08_energy.yml config file.
+"""
+
 import os
 import sys
 import yaml
